@@ -1,0 +1,13 @@
+.blue{
+    /*background-color: #585cbf;*/
+    align-content: center;
+}
+.red{
+     /*background-color: #bf7967;*/
+     align-content: center;
+ }
+.show-badge{
+    align-self: right;
+    margin-right: 5px;
+    font-size: x-large;
+}

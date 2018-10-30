@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="bootstrap.css">
+    <link rel="script" href="bootstrap.js">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="//code.angularjs.org/snapshot/angular.min.js"></script>
+    <!--<script src="angular.js"></script>-->
+
+    <!--<script src="https://code.angularjs.org/1.5.9/angular-route.js"></script>-->
+    <!--<script src="angular.js"></script>-->
+    <script src="test1.js"></script>
+
+</head>
+<body ng-app = "printApp" ng-controller="print">
+
+        kfhjsdfkdj<br>
+        <div ng-repeat="presc in prescList">
+            <input type="checkbox"  value={{$index}} ng-click="checked($event)"> {{presc}}<br>
+        </div>
+
+
+<input id="inp" type="text" ng-model="search.Name" placeholder="name">
+<input type="text" ng-model="search.Country" placeholder="country">
+<button ng-click="print()">click</button>
+</body>
+</html>

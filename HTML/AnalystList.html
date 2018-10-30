@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.angularjs.org/1.5.9/angular.min.js"></script>
+    <script src="analysis.js"></script>
+    <script src="bootstrap.js"></script>
+    <link rel="stylesheet" href="bootstrap.css">
+</head>
+<body class="container-fluid" ng-app="analysisApp" ng-controller="analysisController">
+
+<div class="row" style="margin-top: 20px">
+    <div class="col-lg-2"  >
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">PID</span>
+            </div>
+            <input id="inp_pid" ng-change="showTable()" ng-model="searchText.pid" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">NAME</span>
+            </div>
+            <input id="inp_pname" ng-change="showTable()" type="text" ng-model="searchText.pname" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">AGE</span>
+            </div>
+            <input id="inp_page" ng-change="showTable()" ng-model="searchText.page" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="inp_pphone">PHONE</label>
+            </div>
+            <input id="inp_pphone" ng-change="showTable()" ng-model="searchText.pphone" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+    </div>
+
+</div>
+
+    <div class="card" ng-repeat="patient in allList | filter : searchText">
+        <div class="card-body">
+            <h5 class="card-title">{{patient.pname}}</h5>
+            <h6 ng-hide="true">{{patient.pid}}</h6>
+            <div class="row">
+                <div class="col-md-2">
+                    <p>{{patient.page}}</p>
+                    <p>{{patient.psex}}</p>
+                    <p>{{patient.pphone}}</p>
+                    <p>{{patient.paddr}}</p>
+                </div>
+
+                <!--new ng-repeat on dates start from here-->
+                <div class="col-md-10">
+                    <div class="row" ng-repeat="d in patient.dateList">
+                        <div class="col-md-2">
+                            <h6 align="center"> {{d.date}} </h6>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="card-group">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6 class="card-title">DRUGS</h6>
+                                        <div>
+                                            <ul class="list-group">
+                                                <li class="list-group-item" ng-repeat="drug in d.dlist">{{drug}}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6 class="card-title">PRESCRIPTION</h6>
+                                        <div>
+                                            <ul class="list-group">
+                                                <li class="list-group-item" ng-repeat="pr in d.plist">{{pr}}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6 class="card-title">DESC</h6>
+                                    </div>
+                                    <p align="center">
+                                        {{d.description}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

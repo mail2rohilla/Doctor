@@ -1,0 +1,17 @@
+<!--<h2>Show Event</h2>-->
+
+<!--{{message}}-->
+<!---->
+<!---->
+<ul class="list-group" ng-controller="listLoader" id="list_show_drug_list">
+<!---->
+    <li class='list-group-item' ng-repeat="d in drug| filter: true_list | orderBy:'seq'">
+    <!--<li class='list-group-item' ng-repeat="drug in druglist | listFilter">-->
+        {{d.drug_name}}
+        <button ng-click='removeFromDruglist(d.drug_index)' type='button' style='position: absolute;right: 10px;top: 5px;' class='btn btn-primary btn-sm pull-right'>
+            <span class='glyphicon glyphicon-trash'>
+                remove
+            </span>
+        </button>
+    </li>
+</ul>

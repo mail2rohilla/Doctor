@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!--<script src="angular.min.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.angularjs.org/1.5.9/angular.min.js"></script>
+    <!--<script src="angular.js"></script>-->
+    <!--<script src="angular-route.js"></script>-->
+    <script src="https://code.angularjs.org/1.5.9/angular-route.js"></script>
+    <link rel="stylesheet" href="bootstrap.css">
+    <link rel="stylesheet" href="doctor.css">
+    <script src="bootstrap.js"></script>
+    <script src="PrintPage.js"></script>
+    <script src="angularHandle.js"></script>
+    <script src="../node_modules/jspdf/dist/jspdf.min.js"></script>
+    <title>Patient Record</title>
+    <!--<base href="/" >-->
+    <!--<script src="../node_modules/jquery/dist/jquery.min.js"></script>-->
+    <!--<script src="../node_modules/jquery/dist/jquery.js"></script>-->
+
+</head>
+
+<body ng-app="doctorApp" ng-controller="listLoader">
+    <!--modal for adding drug info-->
+    <div class="modal fade" id="add_drug_modal" role="dialog">
+        <div class="modal-dialog" role="document">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">ADD DRUG</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="drug_add_form" method="post">
+                        <div class="form-group">
+                            <label for="add_drug_name">DRUG NAME</label>
+                            <input name="drug_name" type="text" class="form-control" id="add_drug_name" placeholder="eg Drug1">
+                        </div>
+                        <!--<div class="form-group">-->
+                            <!--<label for="add_drug_index">DRUG INDEX</label>-->
+                            <!--<input name="drug_index" type="number" class="form-control" id="add_drug_index" placeholder="NUMBER FROM ANGULAR.JS">-->
+                        <!--</div>-->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="btn_save_drug_details" ng-click="addDrugDetails()" class="btn btn-default" data-dismiss="modal">SAVE</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!--modal for finding customers-->
+    <div class="modal fade" id="find_patient_data_modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">ADD PRESCRIPTION</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="inp_presc">TEXT</label>
+                            <input type="text" class="form-control" id="inp_presc" aria-describedby="emailHelp" placeholder="enter name">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-click="addPrescription()" class="btn btn-default" data-dismiss="modal">ADD</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container fluid" style="height:750px">
+        <p align="right">
+            <button id="date_button" ng-bind="date" style="margin-top: 5px" class="btn btn-primary">DATE</button>
+        </p>
+        <p align="center" style="margin: 0px">
+            ABC DOCTOR
+        </p>
+        <div class="row">
+            <div class="col-md-1"><button id="btn_add_drug" class="btn btn-primary" data-toggle="modal" data-target="#add_drug_modal">+</button></div>
+            <div  class="input-group mb-3 col-md-4">
+                <div class="input-group-prepend">
+                    <label class="input-group-text">DRUG LIST</label>
+                </div>
+                <select ng-controller="listLoader" ng-change="addToDruglist({{changed_val}})" ng-model="changed_val" class="custom-select" id="druglist">
+                        <option ng-repeat="d in drug" value={{$index}}>{{d.drug_name}}
+                           <div><a href="/addToList"></a></div>
+                        </option>
+                </select>
+            </div>
+
+            <div id="find" class="offset-6 col-md-1"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#find_patient_data_modal">+ presc</button></div>
+        </div>
+
+        <br>
+        <div class="row">
+
+            <div class="col-lg-2"  >
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">PID</span>
+                    </div>
+                    <input id="inp_pid" ng-change="showTable()" ng-model="searchText.pid" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">NAME</span>
+                    </div>
+                    <input id="inp_pname" ng-change="showTable()" type="text" ng-model="searchText.pname" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">AGE</span>
+                    </div>
+                    <input id="inp_page" ng-change="showTable()" ng-model="searchText.page" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="select_psex">SEX</label>
+                    </div>
+                    <select class="custom-select" id="select_psex">
+                        <option>SELECT</option>
+                        <option value="m">MALE</option>
+                        <option value="f">FEMALE</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-lg-3">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Phone</span>
+                    </div>
+                    <input id="inp_pphone" ng-change="showTable()" type="text" ng-model="searchText.pphone" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Address</span>
+                    </div>
+                    <input id="inp_paddr" ng-change="showTable()" type="text" ng-model="searchText.paddr" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+            </div>
+
+            <div class="col-lg-1 ">
+                    <button id="btn_save_patient_details" ng-click="addPatientDetails()" type="button" class="btn btn-primary pull-right">SAVE</button>
+            </div>
+        </div>
+
+        <div  ng-hide="hide_table" style="min-height: 0px;overflow-y: scroll; max-height: 150px">
+        <!--<div  ng-hide="hide_table" style="height: 200px;min-height: 100px;overflow: hidden; overflow-y: scroll">-->
+            <table class="table">
+
+                <tr ng-click="showDetails(patient.pid, patient.pname, patient.page, patient.psex)" ng-repeat="patient in patientsList | filter: searchText">
+                    <td>{{patient.pid}}</td>
+                    <td>{{patient.pname}}</td>
+                    <td>{{patient.page}}</td>
+                    <td>{{patient.psex}}</td>
+                    <td>{{patient.pphone}}</td>
+                    <td>{{patient.paddr}}</td>
+                </tr>
+            </table>
+        </div>
+
+
+        <hr class="red" size="50px">
+
+        <div style="position: relative" >
+            <div ng-hide="hide_details" style="height: 150px; background-color: #6c757d; width: 600px; position: absolute; margin-left: 500px">
+                <p align="center" class="show-badge"><span class="badge badge-primary">{{disp_pname}}</span></p>
+                <p align="center" class="show-badge"><span class="badge badge-primary">{{disp_page}}</span></p>
+                <p align="center" class="show-badge"><span class="badge badge-primary">{{disp_psex}}</span></p>
+            </div>
+            <div ng-hide="hide_presc" style="overflow-y: scroll; height: 150px; background-color: #6c757d; width: 600px; position: absolute; margin-left: 500px">
+                <div ng-repeat="presc in prescList">
+                    <input type="checkbox" name={{$index}} ng-model="presc.show_in_list"  value={{$index}} ng-click="qaddToPrescList($event)">
+                    {{presc.presc}}<br>
+                </div>
+            </div>
+
+            <div class="input-group mb-3 red" style="width: 450px">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">DRUG NAME</span>
+                </div>
+                <input id="drug_name" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+
+            <div class="input-group mb-3 red" style="width: 450px">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">DRUG INDEX</span>
+                </div>
+                <input id="drug_index" data-ng-keypress="addToDruglist1($event)" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+            </div>
+
+
+        <div class="row">
+            <div ng-controller="listLoader" class="col-md-5 red" style="height: 370px; margin-top: 18px; margin-left: 20px">
+                <!--<ul class="list-group" id="list_show_drug_list">-->
+                    <ng-view>
+
+                    </ng-view>
+                <!--</ul>-->
+            </div>
+            <div class="offset-2 col-md-4 red" style="height: 200px; margin-top: 190px">
+                <textarea id="txt_area_description" style="height: 200px; width: 400px"></textarea>
+            </div>
+
+                <button type="button" ng-click="addDrugList()" class="btn btn-primary" style="position: absolute; margin-left: 975px
+                    ; margin-top: 145px"> <a target="http://127.0.0.1:8080/PrintPage.html">SAVE1</a>
+                </button>
+            <button type="button" ng-click="print()" class="btn btn-primary" style="position: absolute; margin-left: 975px
+                    ; margin-top: 100px"> <a target="http://127.0.0.1:8080/PrintPage.html">SAVE2</a>
+            </button>
+
+
+        </div>
+    </div>
+    </div>
+
+    <div ng-hide="printHide" >
+        <div id="printDiv" class="container" style="margin-top: 3px">
+            <div style="height: 150px; background-color: #9fcdff">
+                <div class="row">
+                    <div class="col-md-3" style="height: 150px; background-color: #a4ff8c">
+                        <p align="center"> logo </p>
+                    </div>
+                    <div class="col-md-3 offset-6" style="height: 150px; background-color: #a4ff8c">
+                        <p align="right" style=""> Name </p>
+                        <p align="right"> Qualificns </p>
+                        <p align="right"> Regn No </p>
+                        <p align="right"> telephone No </p>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row" style="margin-top:30px;background-color: #9fcdff">
+                <div class="col-md-2"><p>Name: {{disp_pname}}</p></div>
+                <div class="col-md-1"><p>Age: {{disp_page}}</p></div>
+                <div class="col-md-1"><p>Sex: {{disp_psex}}</p></div>
+                <div class="col-md-3"><p>Mobile No: {{disp_pphone}}</p></div>
+                <div class="col-md-4"><p>Address: {{disp_paddr}}</p></div>
+            </div>
+
+            <div class="row" style="margin-top:30px;background-color: #6f42c1">
+                <div class="col-md-4" style="margin-left: 50px; margin-top: 20px">
+                    <ul class="list-group list-group-flush" >
+                        <li class="list-group-item" ng-repeat="d in drug | filter: printHide">{{d.drug_name}}</li>
+                    </ul>
+                </div>
+                <div class="col-md-4 offset-3" style="margin-top: 20px">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><p align="right" style="margin: 0px">Cras justo odio</p></li>
+                        <li class="list-group-item"><p align="right" style="margin: 0px">Dapibus ac facilisis in</p></li>
+                        <li class="list-group-item"><p align="right" style="margin: 0px">Morbi leo risus</p></li>
+                        <li class="list-group-item"><p align="right" style="margin: 0px">Porta ac consectetur ac</p></li>
+                        <li class="list-group-item"><p align="right" style="margin: 0px">Vestibulum at eros</p></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

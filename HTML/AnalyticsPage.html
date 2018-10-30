@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Analysis</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.angularjs.org/1.5.9/angular.min.js"></script>
+    <link rel="stylesheet" href="bootstrap.css">
+    <script src="bootstrap.js"></script>
+</head>
+
+<body class="container-fluid">
+
+<div class="row">
+
+    <div class="col-lg-2"  >
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">PID</span>
+            </div>
+            <input id="inp_pid" ng-change="showTable()" ng-model="searchText.pid" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">NAME</span>
+            </div>
+            <input id="inp_pname" ng-change="showTable()" type="text" ng-model="searchText.pname" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">AGE</span>
+            </div>
+            <input id="inp_page" ng-change="showTable()" ng-model="searchText.page" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="select_psex">SEX</label>
+            </div>
+            <select class="custom-select" id="select_psex">
+                <option>SELECT</option>
+                <option value="m">MALE</option>
+                <option value="f">FEMALE</option>
+            </select>
+        </div>
+    </div>
+
+    <button type="button" ng-click="getAllData()" class="btn btn-primary">ALL</button>
+
+</div>
+
+</body>
+</html>

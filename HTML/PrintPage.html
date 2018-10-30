@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="bootstrap.css">
+    <link rel="stylesheet" href="doctor.css">
+    <script src="bootstrap.js"></script>
+    <script src="https://code.angularjs.org/1.5.9/angular.min.js"></script>
+    <script src="PrintPage.js"></script>
+    <title>Report</title>
+</head>
+<body ng-app="printApp" ng-controller="print">
+
+    <div class="container" style="margin-top: 3px">
+        <div style="height: 150px; background-color: #9fcdff">
+            <div class="row">
+                <div class="col-md-3" style="height: 150px; background-color: #a4ff8c">
+                    <p align="center"> logo </p>
+                </div>
+                <div class="col-md-3 offset-6" style="height: 150px; background-color: #a4ff8c">
+                    <p align="right" style=""> Name </p>
+                    <p align="right"> Qualificns </p>
+                    <p align="right"> Regn No </p>
+                    <p align="right"> telephone No </p>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row" style="margin-top:30px;background-color: #9fcdff">
+            <div class="col-md-2"><p>Name: {{data.name}}</p></div>
+            <div class="col-md-1"><p>Age: {{data.age}}</p></div>
+            <div class="col-md-1"><p>Sex: {{data.sex}}</p></div>
+            <div class="col-md-3"><p>Mobile No: {{data.phone}}</p></div>
+            <div class="col-md-4"><p>Address: {{data.addr}}</p></div>
+        </div>
+
+        <div class="row" style="margin-top:30px;background-color: #6f42c1">
+            <div class="col-md-4" style="margin-left: 50px; margin-top: 20px">
+                <ul class="list-group list-group-flush" >
+                    <li class="list-group-item" ng-repeat="d in data.list">{{d}}</li>
+                </ul>
+            </div>
+            <div class="col-md-4 offset-3" style="margin-top: 20px">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><p align="right" style="margin: 0px">Cras justo odio</p></li>
+                    <li class="list-group-item"><p align="right" style="margin: 0px">Dapibus ac facilisis in</p></li>
+                    <li class="list-group-item"><p align="right" style="margin: 0px">Morbi leo risus</p></li>
+                    <li class="list-group-item"><p align="right" style="margin: 0px">Porta ac consectetur ac</p></li>
+                    <li class="list-group-item"><p align="right" style="margin: 0px">Vestibulum at eros</p></li>
+                </ul>
+            </div>
+        </div>
+        <!--<footer>-->
+            <!--address of the clinic blah blah blah-->
+        <!--</footer>-->
+    </div>
+</body>
+</html>
